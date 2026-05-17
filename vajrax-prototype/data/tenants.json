@@ -1,0 +1,40 @@
+{
+  "tenants": [
+    {
+      "id": "acme-corp",
+      "name": "ACME Corporation",
+      "slug": "acme-corp",
+      "plan": "enterprise",
+      "region": "us-east-1",
+      "status": "active",
+      "createdAt": "2024-01-15T08:00:00Z",
+      "features": ["fleet-management", "policy-editor", "audit-chain", "offline-sync"],
+      "deviceCount": 5,
+      "adminEmail": "admin@acme.com"
+    },
+    {
+      "id": "retail-plus",
+      "name": "Retail Plus Inc",
+      "slug": "retail-plus",
+      "plan": "professional",
+      "region": "eu-west-1",
+      "status": "active",
+      "createdAt": "2024-02-20T10:30:00Z",
+      "features": ["fleet-management", "policy-editor", "audit-chain"],
+      "deviceCount": 3,
+      "adminEmail": "it@retailplus.com"
+    },
+    {
+      "id": "fintech-solutions",
+      "name": "FinTech Solutions",
+      "slug": "fintech-solutions",
+      "plan": "enterprise",
+      "region": "ap-south-1",
+      "status": "active",
+      "createdAt": "2024-03-10T14:15:00Z",
+      "features": ["fleet-management", "policy-editor", "audit-chain", "offline-sync", "advanced-analytics"],
+      "deviceCount": 8,
+      "adminEmail": "ops@fintechsolutions.io"
+    }
+  ]
+}
