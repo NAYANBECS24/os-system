@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VajraX OS - Cloud Console & Device Simulator</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- Header -->
+        <header class="app-header">
+            <div class="logo-section">
+                <h1>🔱 VajraX OS</h1>
+                <span class="tagline">Enterprise Device Management Platform</span>
+            </div>
+            <div class="tenant-selector">
+                <label>Tenant:</label>
+                <select id="tenantSelect">
+                    <option value="acme-corp">ACME Corporation</option>
+                    <option value="retail-plus">Retail Plus Inc</option>
+                    <option value="fintech-solutions">FinTech Solutions</option>
+                </select>
+            </div>
+            <div class="user-context">
+                <span class="role-badge admin">Admin</span>
+                <span id="currentUser">admin@vajrax.io</span>
+            </div>
+        </header>
+
+        <!-- Control Toolbar -->
+        <div class="control-toolbar">
+            <div class="network-controls">
+                <button id="networkToggle" class="btn btn-primary">
+                    <span class="icon">📡</span>
+                    <span id="networkStatus">Network: Online</span>
+                </button>
+                <div class="connection-indicator" id="connectionIndicator">
+                    <span class="pulse online"></span>
+                </div>
+            </div>
+            <div class="demo-controls">
+                <button id="startDemo" class="btn btn-success">▶ Start 90s Demo</button>
+                <button id="resetDemo" class="btn btn-warning">↻ Reset</button>
+            </div>
+            <div class="sync-controls">
+                <button id="pushPolicy" class="btn btn-secondary">📤 Push Policy</button>
+                <button id="forceSync" class="btn btn-secondary">🔄 Force Sync</button>
+            </div>
+        </div>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Cloud Console Panel (Left) -->
+            <aside class="cloud-console" id="cloudConsole">
+                <div class="panel-header">
+                    <h2>☁️ Cloud Console</h2>
+                    <span class="panel-status" id="cloudStatus">Connected</span>
+                </div>
+
+                <!-- Fleet Dashboard -->
+                <section class="dashboard-section">
+                    <h3>Fleet Overview</h3>
+                    <div class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-value" id="totalDevices">0</div>
+                            <div class="stat-label">Total Devices</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="onlineDevices">0</div>
+                            <div class="stat-label">Online</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="offlineDevices">0</div>
+                            <div class="stat-label">Offline</div>
+                        </div>
+                        <div class="stat-card">
+                            <div class="stat-value" id="pendingSync">0</div>
+                            <div class="stat-label">Pending Sync</div>
+                        </div>
+                    </div>
+
+                    <div class="fleet-table-container">
+                        <table class="fleet-table">
+                            <thead>
+                                <tr>
+                                    <th>Device ID</th>
+                                    <th>Status</th>
+                                    <th>Battery</th>
+                                    <th>Storage</th>
+                                    <th>Last Seen</th>
+                                    <th>Policy Version</th>
+                                </tr>
+                            </thead>
+                            <tbody id="fleetTableBody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- Policy Editor -->
+                <section class="policy-section">
+                    <h3>📋 Policy Editor</h3>
+                    <div class="policy-editor">
+                        <div class="policy-tabs">
+                            <button class="tab active" data-tab="lockdown">Lockdown</button>
+                            <button class="tab" data-tab="network">Network</button>
+                            <button class="tab" data-tab="branding">Branding</button>
+                        </div>
+                        <div class="policy-content">
+                            <div class="tab-panel active" id="lockdownPanel">
+                                <label>
+                                    <input type="checkbox" id="disableCamera" checked>
+                                    Disable Camera
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="disableUSB" checked>
+                                    Disable USB
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="disableSettings">
+                                    Disable Settings
+                                </label>
+                                <label>
+                                    <input type="checkbox" id="kioskMode" checked>
+                                    Kiosk Mode
+                                </label>
+                            </div>
+                            <div class="tab-panel" id="networkPanel">
+                                <label>
+                                    WiFi Required
+                                    <input type="checkbox" id="wifiRequired">
+                                </label>
+                                <label>
+                                    Allow Cellular Fallback
+                                    <input type="checkbox" id="cellularFallback" checked>
+                                </label>
+                                <label>
+                                    Proxy URL
+                                    <input type="text" id="proxyUrl" placeholder="proxy.example.com">
+                                </label>
+                            </div>
+                            <div class="tab-panel" id="brandingPanel">
+                                <label>
+                                    Theme Color
+                                    <input type="color" id="themeColor" value="#6366f1">
+                                </label>
+                                <label>
+                                    Company Name
+                                    <input type="text" id="companyName" value="ACME Corp">
+                                </label>
+                                <label>
+                                    Language
+                                    <select id="appLanguage">
+                                        <option value="en">English</option>
+                                        <option value="hi">Hindi (हिन्दी)</option>
+                                        <option value="ta">Tamil (தமிழ்)</option>
+                                        <option value="te">Telugu (తెలుగు)</option>
+                                    </select>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Telemetry Panel -->
+                <section class="telemetry-section">
+                    <h3>📊 Live Telemetry</h3>
+                    <div class="chart-container">
+                        <canvas id="telemetryChart"></canvas>
+                    </div>
+                    <div class="metrics-grid">
+                        <div class="metric">
+                            <span class="metric-label">CPU Usage</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="cpuUsage" style="width: 45%"></div>
+                            </div>
+                            <span class="metric-value" id="cpuValue">45%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Memory</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="memUsage" style="width: 62%"></div>
+                            </div>
+                            <span class="metric-value" id="memValue">62%</span>
+                        </div>
+                        <div class="metric">
+                            <span class="metric-label">Network</span>
+                            <div class="progress-bar">
+                                <div class="progress-fill" id="netUsage" style="width: 23%"></div>
+                            </div>
+                            <span class="metric-value" id="netValue">23%</span>
+                        </div>
+                    </div>
+                </section>
+            </aside>
+
+            <!-- Device Simulator Panel (Right) -->
+            <aside class="device-simulator" id="deviceSimulator">
+                <div class="panel-header">
+                    <h2>📱 Device Simulator</h2>
+                    <span class="panel-status" id="deviceStatus">Active</span>
+                </div>
+
+                <!-- Device Frame -->
+                <div class="device-frame">
+                    <div class="device-bezel">
+                        <div class="device-screen" id="deviceScreen">
+                            <!-- Status Bar -->
+                            <div class="status-bar">
+                                <span class="time" id="deviceTime">12:00</span>
+                                <div class="status-icons">
+                                    <span class="signal" id="deviceSignal">📶</span>
+                                    <span class="battery" id="deviceBattery">🔋 85%</span>
+                                </div>
+                            </div>
+
+                            <!-- Launcher Screen -->
+                            <div class="launcher" id="launcher">
+                                <div class="launcher-header">
+                                    <h3 id="launcherTitle">ACME Corp</h3>
+                                    <p class="language-indicator" id="languageIndicator">English</p>
+                                </div>
+
+                                <div class="app-grid">
+                                    <div class="app-icon primary" id="posButton">
+                                        <div class="icon">💳</div>
+                                        <span>Quick Sale</span>
+                                    </div>
+                                    <div class="app-icon">
+                                        <div class="icon">📦</div>
+                                        <span>Inventory</span>
+                                    </div>
+                                    <div class="app-icon">
+                                        <div class="icon">👥</div>
+                                        <span>Customers</span>
+                                    </div>
+                                    <div class="app-icon">
+                                        <div class="icon">📊</div>
+                                        <span>Reports</span>
+                                    </div>
+                                    <div class="app-icon disabled" id="cameraApp">
+                                        <div class="icon">📷</div>
+                                        <span>Camera</span>
+                                    </div>
+                                    <div class="app-icon disabled" id="settingsApp">
+                                        <div class="icon">⚙️</div>
+                                        <span>Settings</span>
+                                    </div>
+                                </div>
+
+                                <div class="quick-stats">
+                                    <div class="stat">
+                                        <span class="label">Today's Sales</span>
+                                        <span class="value" id="todaySales">₹0</span>
+                                    </div>
+                                    <div class="stat">
+                                        <span class="label">Transactions</span>
+                                        <span class="value" id="todayTransactions">0</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Transaction Modal -->
+                            <div class="modal-overlay hidden" id="transactionModal">
+                                <div class="modal-content">
+                                    <h3>New Transaction</h3>
+                                    <div class="form-group">
+                                        <label>Amount (₹)</label>
+                                        <input type="number" id="transactionAmount" value="100" min="1">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Payment Method</label>
+                                        <select id="paymentMethod">
+                                            <option value="upi">UPI</option>
+                                            <option value="card">Card</option>
+                                            <option value="cash">Cash</option>
+                                        </select>
+                                    </div>
+                                    <div class="modal-actions">
+                                        <button class="btn btn-cancel" id="cancelTransaction">Cancel</button>
+                                        <button class="btn btn-success" id="confirmTransaction">Confirm</button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Success Animation -->
+                            <div class="success-animation hidden" id="successAnimation">
+                                <div class="checkmark">✓</div>
+                                <p>Payment Successful!</p>
+                                <p class="amount" id="successAmount">₹100</p>
+                            </div>
+
+                            <!-- Boot Screen -->
+                            <div class="boot-screen hidden" id="bootScreen">
+                                <div class="boot-logo">🔱</div>
+                                <h2>VajraX OS</h2>
+                                <p>Secure Enterprise Platform</p>
+                                <div class="boot-progress">
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="bootProgress"></div>
+                                    </div>
+                                </div>
+                                <p class="boot-version">v2.4.0</p>
+                            </div>
+                        </div>
+
+                        <!-- Device Navigation Buttons -->
+                        <div class="device-nav">
+                            <button class="nav-btn">◀</button>
+                            <button class="nav-btn home">●</button>
+                            <button class="nav-btn">▶</button>
+                        </div>
+                    </div>
+
+                    <!-- Device Info -->
+                    <div class="device-info">
+                        <div class="info-row">
+                            <span>Model:</span>
+                            <span>VajraX Tablet Pro</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Serial:</span>
+                            <span>VX-2024-001</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Policy:</span>
+                            <span id="devicePolicyVersion">v1.0.0</span>
+                        </div>
+                        <div class="info-row">
+                            <span>Queue:</span>
+                            <span id="deviceQueue">0 pending</span>
+                        </div>
+                    </div>
+                </div>
+            </aside>
+        </main>
+
+        <!-- Audit Chain Timeline -->
+        <footer class="audit-timeline" id="auditTimeline">
+            <div class="timeline-header">
+                <h3>🔗 Cryptographic Audit Chain</h3>
+                <div class="chain-status">
+                    <span class="status-indicator" id="chainStatus">✓ Chain Intact</span>
+                    <span class="chain-head" id="chainHead">Head: 0x0000...</span>
+                </div>
+            </div>
+            <div class="timeline-container">
+                <div class="timeline-entries" id="timelineEntries">
+                    <!-- Audit entries populated dynamically -->
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Demo Progress Overlay -->
+    <div class="demo-overlay hidden" id="demoOverlay">
+        <div class="demo-progress">
+            <h2>Demo in Progress</h2>
+            <div class="progress-bar">
+                <div class="progress-fill" id="demoProgress"></div>
+            </div>
+            <p id="demoStep">Initializing...</p>
+            <button class="btn btn-cancel" id="stopDemo">Stop Demo</button>
+        </div>
+    </div>
+
+    <!-- Tamper Alert Modal -->
+    <div class="tamper-alert hidden" id="tamperAlert">
+        <div class="alert-content">
+            <div class="alert-icon">⚠️</div>
+            <h2>Audit Chain Tampering Detected!</h2>
+            <p>The cryptographic integrity of the audit log has been compromised.</p>
+            <p class="alert-details" id="tamperDetails"></p>
+            <button class="btn btn-danger" id="acknowledgeTamper">Acknowledge</button>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="data/tenants.json" type="module"></script>
+    <script src="data/devices.json" type="module"></script>
+    <script src="data/policies.yaml" type="module"></script>
+    <script src="src/core/event-bus.js"></script>
+    <script src="src/core/state-manager.js"></script>
+    <script src="src/core/crypto-utils.js"></script>
+    <script src="src/cloud/console-ui.js"></script>
+    <script src="src/cloud/fleet-dashboard.js"></script>
+    <script src="src/cloud/policy-editor.js"></script>
+    <script src="src/device/simulator.js"></script>
+    <script src="src/device/agent.js"></script>
+    <script src="src/device/reconciliation-loop.js"></script>
+    <script src="src/device/offline-queue.js"></script>
+    <script src="src/audit/chain-manager.js"></script>
+    <script src="src/audit/log-viewer.js"></script>
+    <script src="src/network/connection-manager.js"></script>
+    <script src="src/network/sync-engine.js"></script>
+    <script src="scripts/run-demo.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

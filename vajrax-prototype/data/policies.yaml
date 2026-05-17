@@ -1,0 +1,101 @@
+# VajraX OS Device Policy Configuration
+# Version: 1.0.0
+# Tenant: acme-corp
+
+metadata:
+  policyId: "policy-acme-001"
+  version: "1.0.0"
+  tenantId: "acme-corp"
+  createdAt: "2024-01-15T08:00:00Z"
+  updatedAt: "2024-12-19T10:00:00Z"
+  signature: "ed25519:a3f5b8c2d1e4f6789abc123def456"
+
+lockdown:
+  disableCamera: true
+  disableUSB: true
+  disableSettings: false
+  disableBluetooth: false
+  disableWiFi: false
+  kioskMode: true
+  allowedApps:
+    - "com.vajrax.pos"
+    - "com.vajrax.inventory"
+    - "com.vajrax.customers"
+    - "com.vajrax.reports"
+  blockedApps:
+    - "com.android.camera"
+    - "com.android.settings"
+    - "com.google.play.store"
+  homeScreenMode: "single-app"
+  statusBarEnabled: true
+  navigationBarEnabled: true
+
+network:
+  wifiRequired: false
+  cellularFallback: true
+  proxyUrl: ""
+  proxyPort: 0
+  proxyEnabled: false
+  dnsServers:
+    - "8.8.8.8"
+    - "8.8.4.4"
+  allowedSSIDs:
+    - "ACME-Secure"
+    - "ACME-Guest"
+  minWifiSignalStrength: -75
+  connectionTimeout: 30
+  retryAttempts: 3
+
+security:
+  encryptionEnabled: true
+  encryptionAlgorithm: "AES-256-GCM"
+  pinRequired: true
+  pinLength: 6
+  biometricEnabled: true
+  autoLockTimeout: 300
+  failedAttemptLimit: 5
+  wipeOnFailedAttempts: false
+  auditLogEnabled: true
+  auditRetentionDays: 90
+
+branding:
+  themeColor: "#6366f1"
+  companyName: "ACME Corp"
+  logoUrl: "/assets/acme-logo.png"
+  primaryLanguage: "en"
+  supportedLanguages:
+    - "en"
+    - "hi"
+    - "ta"
+    - "te"
+  welcomeMessage: "Welcome to ACME POS"
+  supportContact: "support@acme.com"
+
+schedule:
+  bootTime: "08:00"
+  shutdownTime: "22:00"
+  timezone: "Asia/Kolkata"
+  autoUpdateEnabled: true
+  updateWindow: "02:00-04:00"
+  maintenanceDay: "sunday"
+
+geofence:
+  enabled: false
+  allowedLocations: []
+  alertOnExit: true
+  alertOnEntry: false
+
+power:
+  sleepTimeout: 600
+  screenTimeout: 120
+  brightnessLevel: 80
+  adaptiveBrightness: true
+  chargingOptimization: true
+
+telemetry:
+  enabled: true
+  heartbeatInterval: 60
+  metricsBatchSize: 10
+  uploadInterval: 300
+  compressionEnabled: true
+  bandwidthLimit: 1048576
